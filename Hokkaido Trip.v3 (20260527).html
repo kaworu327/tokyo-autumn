@@ -1,0 +1,1230 @@
+<!DOCTYPE html>
+<html lang="zh-TW">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, maximum-scale=1.0, user-scalable=no">
+    <title>北海道秋季自然及溫泉之旅</title>
+    <!-- 引入日式圓體字 Zen Maru Gothic -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Zen+Maru+Gothic:wght@400;500;700&display=swap" rel="stylesheet">
+    
+    <style>
+        :root {
+            --bg-color: #FAF6F0;
+            --text-color: #4A3E3D;
+            --primary-warm: #E27D60;
+            --sky-blue: #E8F1F5;
+            --tag-alert: #FF6B6B;
+            --tag-port: #4EA8DE;
+        }
+
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+            font-family: 'Zen Maru Gothic', sans-serif;
+            -webkit-tap-highlight-color: transparent;
+        }
+
+        body {
+            background-color: var(--bg-color);
+            /* 日式可愛波點背景 */
+            background-image: radial-gradient(#EFE9DE 15%, transparent 16%);
+            background-size: 20px 20px;
+            color: var(--text-color);
+            display: flex;
+            justify-content: center;
+            min-height: 100vh;
+        }
+
+        /* 模擬手機容器 */
+        .phone-container {
+            width: 100%;
+            max-width: 480px;
+            background: rgba(255, 255, 255, 0.6);
+            backdrop-filter: blur(4px);
+            min-height: 100vh;
+            display: flex;
+            flex-direction: column;
+            box-shadow: 0 0 20px rgba(0,0,0,0.05);
+            position: relative;
+        }
+
+        /* 標頭區 */
+        header {
+            background: linear-gradient(135deg, #F9D5A5, #F28A80);
+            padding: 20px 16px;
+            text-align: center;
+            border-bottom-left-radius: 24px;
+            border-bottom-right-radius: 24px;
+            box-shadow: 0 4px 12px rgba(242,138,128,0.2);
+        }
+
+        header h1 {
+            font-size: 1.4rem;
+            color: #ffffff;
+            text-shadow: 1px 1px 2px rgba(0,0,0,0.1);
+            margin-bottom: 4px;
+        }
+
+        header p {
+            font-size: 0.85rem;
+            color: rgba(255,255,255,0.9);
+        }
+
+        /* 水平滾動分頁標籤 */
+        .tab-bar {
+            display: flex;
+            overflow-x: auto;
+            white-space: nowrap;
+            padding: 12px 8px;
+            gap: 8px;
+            scrollbar-width: none; /* Firefox */
+        }
+        .tab-bar::-webkit-scrollbar {
+            display: none; /* Chrome/Safari */
+        }
+
+        .tab-btn {
+            flex: 0 0 auto;
+            padding: 10px 16px;
+            background-color: #ffffff;
+            border: 2px solid #EFE9DE;
+            border-radius: 20px;
+            font-weight: 500;
+            font-size: 0.9rem;
+            color: var(--text-color);
+            cursor: pointer;
+            transition: all 0.2s ease;
+            text-align: center;
+            box-shadow: 0 2px 6px rgba(0,0,0,0.03);
+        }
+
+        .tab-btn span {
+            display: block;
+            font-size: 0.7rem;
+            opacity: 0.7;
+        }
+
+        /* 行程主內容區 */
+        .content-container {
+            padding: 0 16px 40px 16px;
+            flex: 1;
+        }
+
+        .day-panel {
+            display: none;
+        }
+        .day-panel.active {
+            display: block;
+            animation: fadeIn 0.4s ease;
+        }
+
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(8px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+
+        /* 每日的主題狀態列 (包含天氣與主題標題) */
+        .day-header {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+            margin: 12px 0;
+            padding: 8px 4px;
+            border-bottom: 2px dashed #E5DEC9;
+        }
+
+        .day-title {
+            font-size: 1.1rem;
+            font-weight: 700;
+            display: flex;
+            align-items: center;
+            gap: 6px;
+        }
+
+        .weather-box {
+            background-color: #ffffff;
+            padding: 4px 10px;
+            border-radius: 12px;
+            font-size: 0.8rem;
+            font-weight: 500;
+            box-shadow: 0 2px 5px rgba(0,0,0,0.05);
+            border: 1px solid #EFE9DE;
+            text-align: right;
+        }
+
+        /* 日式圓角卡片 */
+        .card {
+            background: #ffffff;
+            border-radius: 20px;
+            padding: 16px;
+            margin-bottom: 14px;
+            box-shadow: 0 4px 12px rgba(0,0,0,0.03);
+            border: 2px solid transparent;
+            position: relative;
+        }
+
+        /* 景點大字體與彈性佈局 */
+        .card-main {
+            display: flex;
+            justify-content: space-between;
+            align-items: flex-start;
+            gap: 8px;
+        }
+
+        .time-badge {
+            font-size: 0.85rem;
+            font-weight: 700;
+            background-color: #F7F3ED;
+            padding: 2px 8px;
+            border-radius: 8px;
+            color: #8A7E72;
+            margin-bottom: 6px;
+            display: inline-block;
+        }
+
+        .spot-name {
+            font-size: 1.25rem;
+            font-weight: 700;
+            color: var(--text-color);
+            line-height: 1.35;
+        }
+
+        .map-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            background-color: var(--sky-blue);
+            color: #4A7A96;
+            text-decoration: none;
+            padding: 6px 10px;
+            border-radius: 12px;
+            font-size: 0.75rem;
+            font-weight: 500;
+            white-space: nowrap;
+            transition: background 0.2s;
+            border: 1px solid #D5E4EC;
+        }
+        .map-link:active {
+            background-color: #D5E4EC;
+        }
+
+        .card-desc {
+            margin-top: 8px;
+            font-size: 0.88rem;
+            color: #6B5E5D;
+            line-height: 1.5;
+            background: #FCFAF7;
+            padding: 8px 12px;
+            border-radius: 12px;
+        }
+
+        /* 交通卡片特殊樣式 */
+        .drive-card {
+            background: rgba(232, 241, 245, 0.4);
+            border: 2px dashed #CDDBE2;
+            border-radius: 16px;
+            padding: 12px 16px;
+            margin-bottom: 14px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+
+        .drive-info {
+            font-size: 0.88rem;
+        }
+
+        .drive-target {
+            font-style: italic;
+            font-weight: 500;
+            color: #4A7A96;
+        }
+
+        .drive-meta {
+            font-size: 0.75rem;
+            color: #82949E;
+            margin-top: 2px;
+        }
+
+        /* 重點提示標籤 */
+        .badge {
+            display: inline-block;
+            padding: 3px 8px;
+            border-radius: 8px;
+            font-size: 0.75rem;
+            font-weight: 700;
+            color: #ffffff;
+            margin-top: 4px;
+        }
+        .badge-alert {
+            background-color: var(--tag-alert);
+            box-shadow: 0 2px 6px rgba(255,107,107,0.3);
+        }
+        .badge-port {
+            background-color: var(--tag-port);
+            box-shadow: 0 2px 6px rgba(78,168,222,0.3);
+        }
+
+        /* 各天主題配色定義 */
+        .theme-day1 { --accent-theme: #5ba4e5; }
+        .theme-day2 { --accent-theme: #e06d53; }
+        .theme-day3 { --accent-theme: #4f9d67; }
+        .theme-day4 { --accent-theme: #3e9c9c; }
+        .theme-day5 { --accent-theme: #dfa038; }
+        .theme-day6 { --accent-theme: #a34e78; }
+        .theme-day7 { --accent-theme: #c84b31; }
+        .theme-day8 { --accent-theme: #2e8b9a; }
+        .theme-day9 { --accent-theme: #b05c74; }
+        .theme-day10 { --accent-theme: #d4a373; }
+
+        .tab-btn.active {
+            background-color: var(--accent-theme);
+            color: #ffffff;
+            border-color: var(--accent-theme);
+            box-shadow: 0 4px 10px rgba(0,0,0,0.15);
+        }
+        .tab-btn.active span {
+            color: rgba(255,255,255,0.8);
+        }
+        .day-panel.active .card {
+            border-left: 5px solid var(--accent-theme);
+        }
+    </style>
+</head>
+<body>
+
+<div class="phone-container">
+    <header>
+        <h1>北海道自駕之旅 🍁</h1>
+        <p>10天9夜 秋季自然及溫泉奢華美學</p>
+    </header>
+
+    <!-- 頂部頁籤列 -->
+    <div class="tab-bar" id="tabBar">
+        <button class="tab-btn active theme-day1" onclick="switchDay(1)">D1<span>9/25 (五)</span></button>
+        <button class="tab-btn theme-day2" onclick="switchDay(2)">D2<span>9/26 (六)</span></button>
+        <button class="tab-btn theme-day3" onclick="switchDay(3)">D3<span>9/27 (日)</span></button>
+        <button class="tab-btn theme-day4" onclick="switchDay(4)">D4<span>9/28 (一)</span></button>
+        <button class="tab-btn theme-day5" onclick="switchDay(5)">D5<span>9/29 (二)</span></button>
+        <button class="tab-btn theme-day6" onclick="switchDay(6)">D6<span>9/30 (三)</span></button>
+        <button class="tab-btn theme-day7" onclick="switchDay(7)">D7<span>10/1 (四)</span></button>
+        <button class="tab-btn theme-day8" onclick="switchDay(8)">D8<span>10/2 (五)</span></button>
+        <button class="tab-btn theme-day9" onclick="switchDay(9)">D9<span>10/3 (六)</span></button>
+        <button class="tab-btn theme-day10" onclick="switchDay(10)">D10<span>10/4 (日)</span></button>
+    </div>
+
+    <!-- 行程面板容器 -->
+    <div class="content-container" id="contentContainer">
+
+        <!-- ==================== DAY 1 ==================== -->
+        <div id="day1" class="day-panel active theme-day1">
+            <div class="day-header">
+                <div class="day-title">✈️ Day 1: 抵達網走、直奔必比登</div>
+                <div class="weather-box">網走 ☁️<br>18°C / 12°C</div>
+            </div>
+            
+            <div class="card">
+                <div class="time-badge">18:30</div>
+                <div class="card-main">
+                    <div class="spot-name">女滿別機場 (MMB)</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=女滿別機場" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-port">🚨 機場乘坐/降落時間提示</span></div>
+                <div class="card-desc">乘坐 HD79 航班（16:45 羽田起飛）黃昏準時降落。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">18:30 - 19:00</div>
+                <div class="spot-name" style="font-size:1.1rem;">🚗 辦理取車與自駕手續</div>
+                <div class="card-desc">於機場內租車櫃檯辦理手續，準備開啟自駕之旅。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 30 min | 🛣️ 20 km</div>
+                    <div><span class="drive-target">前往 網走市區</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=女滿別機場&destination=網走市區" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">19:30 - 21:30</div>
+                <div class="card-main">
+                    <div class="spot-name">🍱 酒菜亭 喜八</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=酒菜亭+喜八" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">網走米其林必比登推薦名店，第一晚享用最道地的鄂霍次克海鮮珍味。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">21:40</div>
+                <div class="card-main">
+                    <div class="spot-name">🏨 網走 Dormy Inn</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=網走+Dormy+Inn+天都の湯" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-alert">🚨 登記入住提示</span></div>
+                <div class="card-desc">天都の湯 ドーミーイン網走。好好泡湯休息。</div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 2 ==================== -->
+        <div id="day2" class="day-panel theme-day2">
+            <div class="day-header">
+                <div class="day-title">🍁 Day 2: 網走歷史 ➔ 直奔知床</div>
+                <div class="weather-box">知床 ☀️<br>17°C / 10°C</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">08:30</div>
+                <div class="spot-name" style="font-size:1.1rem;">🚗 網走 Dormy Inn 出發</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 15 min | 🛣️ 7.2 km</div>
+                    <div><span class="drive-target">前往 能取湖珊瑚草群落地</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=網走+Dormy+Inn&destination=能取湖珊瑚草群落地" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">08:45 - 09:30</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 能取湖珊瑚草群落地</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=能取湖珊瑚草群落地" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">秋季限定珊瑚紅草地毯，戶外無定休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 20 min | 🛣️ 13.5 km</div>
+                    <div><span class="drive-target">前往 博物館網走監獄</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=能取湖珊瑚草群落地&destination=博物館網走監獄" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">09:50 - 11:50</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 博物館網走監獄</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=博物館網走監獄" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">世界最古老五翼放射狀木造監獄，年中無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 5 min | 🛣️ 1.5 km</div>
+                    <div><span class="drive-target">前往 鄂霍次克流冰館</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=博物館網走監獄&destination=鄂霍次克流冰館" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">12:00 - 13:00</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 鄂霍次克流冰館</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=鄂霍刻克流冰館" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">頂樓展望台由隈研吾團隊參與設計，年中無休。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">13:00 - 13:45</div>
+                <div class="card-main">
+                    <div class="spot-name">🍱 Cafe&Restaurant 360</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=流冰館+Cafe+Restaurant+360" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">快食午餐：位於流冰館 2F，享用道地海鮮咖哩。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 1 hr 15 min | 🛣️ 69.9 km</div>
+                    <div><span class="drive-target">前往 雙美瀑布</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=鄂霍次克流冰館&destination=雙美瀑布" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">15:00 - 15:45</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 雙美瀑布 (オシンコシンの滝)</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=オシンコシンの滝" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">瀑布百選與原始林紅葉，戶外無定休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 15 min | 🛣️ 8.5 km</div>
+                    <div><span class="drive-target">前往 宇登呂 KIKI知床</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=雙美瀑布&destination=KIKI知床+ナチュラルリゾート" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">16:00</div>
+                <div class="card-main">
+                    <div class="spot-name">🏨 KIKI知床 ナチュラルリゾート</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=KIKI知床+ナチュラルリゾート" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-alert">🚨 入住時間重點提示</span></div>
+                <div class="card-desc">抵達森林系渡假村，放鬆享受大自然。</div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 3 ==================== -->
+        <div id="day3" class="day-panel theme-day3">
+            <div class="day-header">
+                <div class="day-title">🍁 Day 3: 知床五湖散策 ➔ 極光號觀光船</div>
+                <div class="weather-box">宇登呂 🌦️<br>15°C / 9°C</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">09:30</div>
+                <div class="spot-name" style="font-size:1.1rem;">🚗 KIKI知床 悠閒出發</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 30 min | 🛣️ 14 km</div>
+                    <div><span class="drive-target">前往 知床五湖</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=KIKI知床&destination=知床五湖" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">10:00 - 12:30</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 知床五湖（地面步道大圈）</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=知床五湖" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">深入森林捕捉紅葉與連山倒影，秋季無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 30 min | 🛣️ 14 km</div>
+                    <div><span class="drive-target">前往 宇登呂港</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=知床五湖&destination=宇登呂港" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">13:00 - 14:15</div>
+                <div class="card-main">
+                    <div class="spot-name">🍱 道之驛うとろ・シリエトク</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=道の駅うとろ・シリエトク" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">悠閒享用極致鮭魚親子丼與選購紀念品。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">14:15 - 14:45</div>
+                <div class="card-main">
+                    <div class="spot-name">⚓ 極光號售票處</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=知床観光船おーろら" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-port">🚨 到達碼頭/報到時間提示</span></div>
+                <div class="card-desc">辦理第四航班報到手續與準備登船。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">14:45 - 16:15</div>
+                <div class="card-main">
+                    <div class="spot-name">🛳️ 知床觀光船極光號</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=知床観光船おーろら" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-port">🚨 碼頭航程乘坐時間提示</span></div>
+                <div class="card-desc">硫黃山航路・第4航班。拍攝海蝕紅葉斷崖，秋季每天運行。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 30 min | 🛣️ 15 km</div>
+                    <div><span class="drive-target">前往 知床峠展望台</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=宇登呂港&destination=知床峠" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">16:45 - 17:15</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 知床峠展望台</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=知床峠" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">大雪山羅臼岳黃昏日落絕景，公路無定休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 25 min | 🛣️ 15 km</div>
+                    <div><span class="drive-target">前往 KIKI知床</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=知床峠&destination=KIKI知床" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">17:40</div>
+                <div class="spot-name">🏨 返回：KIKI知床 ナチュラルリゾート</div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 4 ==================== -->
+        <div id="day4" class="day-panel theme-day4">
+            <div class="day-header">
+                <div class="day-title">🚙 Day 4: 天堂路 ➔ 摩周藍 ➔ 濕原設計宿</div>
+                <div class="weather-box">弟子屈 ☀️<br>16°C / 8°C</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">09:00</div>
+                <div class="spot-name" style="font-size:1.1rem;">🚗 KIKI知床 出發</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 40 min | 🛣️ 35 km</div>
+                    <div><span class="drive-target">前往 通往天堂的道路</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=KIKI知床&destination=天に続く道" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">09:40 - 10:10</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 通往天堂的道路 (天に続く道)</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=天に続く道" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">早晨拍照順光、線條最美，戶外無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 50 min | 🛣️ 45 km</div>
+                    <div><span class="drive-target">前往 硫磺山</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=天に続く道&destination=硫黄山" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">11:00 - 11:45</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 硫磺山 (アトサヌプリ)</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=硫黄山+(アトサヌプリ)" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">震撼的地熱與金黃色灌木叢，無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 20 min | 🛣️ 15 km</div>
+                    <div><span class="drive-target">前往 摩周湖第一展望台</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=硫黄山&destination=摩周湖第一展望台" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">12:05 - 12:45</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 摩周湖第一展望台</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=摩周湖第一展望台" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">神祕摩周藍與深秋紅葉，無休。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">12:45 - 13:15</div>
+                <div class="card-main">
+                    <div class="spot-name">🍱 摩周湖摩周テラス</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=摩周湖摩周テラス" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">輕食補給：於展望台輕快享用午餐。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 45 min | 🛣️ 38 km</div>
+                    <div><span class="drive-target">前往 コッタロ濕原展望台</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=摩周湖第一展望台&destination=コッタロ湿原展望台" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">14:00 - 15:00</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 コッタロ濕原展望台</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=コッタロ湿原展望台" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">最原始的秘境濕原秋裝，戶外無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 15 min | 🛣️ 12 km</div>
+                    <div><span class="drive-target">前往 ぽん・ぽんゆ</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=コッタロ湿原展望台&destination=かや沼温泉+ぽん・ぽんゆ" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">15:15</div>
+                <div class="card-main">
+                    <div class="spot-name">🏨 ぽん・ぽんゆ (釧路湿原かや沼温泉)</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=かや沼温泉+ぽん・ぽんゆ" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-alert">🚨 入住時間重點提示</span></div>
+                <div class="card-desc">入住極具現代感設計風的設計宿。</div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 5 ==================== -->
+        <div id="day5" class="day-panel theme-day5">
+            <div class="day-header">
+                <div class="day-title">🍁 Day 5: 金色濕原 ➔ 鄙之座奢華控制</div>
+                <div class="weather-box">阿寒湖 ☁️<br>15°C / 7°C</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">09:30</div>
+                <div class="spot-name" style="font-size:1.1rem;">🚗 ぽん・ぽんゆ 出發</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 45 min | 🛣️ 39 km</div>
+                    <div><span class="drive-target">前往 溫根內高架木棧道</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=かや沼温泉&destination=温根内高架木棧道" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">10:15 - 11:45</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 溫根內高架木棧道</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=温根内高架木棧道" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">漫步在金色麥浪般的濕原中央，步道全天開放。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 1 hr | 🛣️ 59 km</div>
+                    <div><span class="drive-target">前往 阿寒湖</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=温根内高架木棧道&destination=阿寒湖" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">12:45 - 14:00</div>
+                <div class="card-main">
+                    <div class="spot-name">🍱 愛努村散策與午餐</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=阿寒湖アイヌコタン" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">漫步充滿歷史與木雕工藝建築美學的 Ainu Kotan。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">14:00</div>
+                <div class="card-main">
+                    <div class="spot-name">🏨 阿寒湖 鶴雅別莊 鄙之座</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=阿寒湖+鶴雅別莊+鄙之座" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-alert">🚨 精準 Check-in 重點提示</span></div>
+                <div class="card-desc">下午兩點整準時走入旅館，開啟頂級奢華溫泉度假模式。</div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 6 ==================== -->
+        <div id="day6" class="day-panel theme-day6">
+            <div class="day-header">
+                <div class="day-title">🏛️ Day 6: 古堡酒莊 ➔ 清寂房精準入住</div>
+                <div class="weather-box">十勝 ☀️<br>17°C / 9°C</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">10:30</div>
+                <div class="card-main">
+                    <div class="spot-name">🚗 離開：鄙之座</div>
+                </div>
+                <div><span class="badge badge-alert">🚨 精準 Check-out 提示</span></div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 2 hr | 🛣️ 95 km</div>
+                    <div><span class="drive-target">前往 池田葡萄酒城</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=阿寒湖+鄙之座&destination=池田ワイン城" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">12:30 - 13:30</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 池田葡萄酒城</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=池田ワイン城" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">中世紀歐式古堡建築與熟成酒窖巡禮，年中無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 30 min | 🛣️ 25 km</div>
+                    <div><span class="drive-target">前往 帶廣市區</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=池田ワイン城&destination=元祖ぱんちょう" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">14:00 - 14:30</div>
+                <div class="card-main">
+                    <div class="spot-name">🍱 元祖ぱんちょう</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=元祖ぱんちょう" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">豚丼名店：避開尖峰，速吃帶廣名物。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 30 min | 🛣️ 12 km</div>
+                    <div><span class="drive-target">前往 十勝川溫泉區</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=元祖ぱんちょう&destination=十勝が丘展望台" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">15:00 - 15:20</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 十勝が丘展望台</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=十勝が丘展望台" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">180度俯瞰十勝川白鳥大橋與平原秋色，無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 10 min | 🛣️ 4 km</div>
+                    <div><span class="drive-target">前往 清寂房</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=十勝が丘展望台&destination=十勝川モール温泉+清寂房" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">15:30</div>
+                <div class="card-main">
+                    <div class="spot-name">🏨 十勝川モール温泉 清寂房</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=十勝川モール温泉+清寂房" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-alert">🚨 精準 Check-in 重點提示</span></div>
+                <div class="card-desc">享受私人摩爾植物溫泉與清水模極簡空間。</div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 7 ==================== -->
+        <div id="day7" class="day-panel theme-day7">
+            <div class="day-header">
+                <div class="day-title">🍁 Day 7: 三國峠樹海 ➔ 黑岳纜車</div>
+                <div class="weather-box">層雲峽 🍂<br>13°C / 5°C</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">10:30</div>
+                <div class="card-main">
+                    <div class="spot-name">🚗 離開：十勝川清寂房</div>
+                </div>
+                <div><span class="badge badge-alert">🚨 精準 Check-out 提示</span></div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 1 hr 45 min | 🛣️ 95 km</div>
+                    <div><span class="drive-target">前往 三國峠 カフェ展望台</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=十勝川温泉+清寂房&destination=三国峠+カフェ" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">12:15 - 12:45</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 三國峠 カフェ展望台</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=三国峠+カフェ" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">🍱 快食午餐：看紅色松見大橋橫跨金紅樹海絕景。在外帶手沖咖啡與輕食以節省時間。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 30 min | 🛣️ 31 km</div>
+                    <div><span class="drive-target">前往 流星之瀑・銀河之瀑</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=三国峠&destination=流星の滝" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">13:15 - 13:55</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 流星之瀑・銀河之瀑</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=流星の滝" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">近距離觀賞百米紅葉峭壁雙瀑絕景，無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 5 min | 🛣️ 3 km</div>
+                    <div><span class="drive-target">前往 層雲峽・黑岳索道纜車</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=流星の滝&destination=黑岳ロープウェイ" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">14:00 - 16:15</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 層雲峽・黑岳索道纜車</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=黒岳ロープウェイ" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">大雪山國立公園震撼的斷崖紅葉，秋季無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 1 hr 15 min | 🛣️ 74 km</div>
+                    <div><span class="drive-target">前往 森のゆ 花神樂酒店</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=黑岳ロープウェイ&destination=森のゆ+花神楽" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">17:30</div>
+                <div class="card-main">
+                    <div class="spot-name">🏨 森のゆ 花神樂酒店</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=森のゆ+花神楽" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-alert">🚨 入住時間重點提示</span></div>
+                <div class="card-desc">入住旭川市郊・森のゆ 花神樂酒店。</div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 8 ==================== -->
+        <div id="day8" class="day-panel theme-day8">
+            <div class="day-header">
+                <div class="day-title">🏛️ Day 8: 美瑛青池 ➔ 札幌幾何公園</div>
+                <div class="weather-box">札幌 ☀️<br>14°C / 6°C</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">08:45</div>
+                <div class="spot-name" style="font-size:1.1rem;">🚗 花神樂酒店 出發</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 45 min | 🛣️ 35.6 km</div>
+                    <div><span class="drive-target">前往 美瑛山區</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=森のゆ+花神楽&destination=白金青い池" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">09:30 - 11:00</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 美瑛白金青池 & 白鬍子瀑布</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=白金青い池" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">秋季枯木與藍色湖水，美不勝收。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 55 min | 🛣️ 41.7 km</div>
+                    <div><span class="drive-target">前往 旭川市中心</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=白金青い池&destination=北海道立旭川美術館" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">11:55 - 13:25</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 北海道立旭川美術館 & 常磐公園</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=北海道立旭川美術館" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">【🚨週五正常開放】漫步常磐公園楓紅，欣賞現代紅磚粗獷主義建築。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">13:25 - 14:00</div>
+                <div class="card-main">
+                    <div class="spot-name">🍱 梅光軒 或 青葉 本店</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=旭川+拉麵+青葉+本店" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">品嚐最道地的旭川醬油拉麵。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 1 hr 50 min | 🛣️ 135 km</div>
+                    <div><span class="drive-target">前往 莫埃來沼公園</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=旭川&destination=モエレ沼公園" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">15:50 - 17:20</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 莫埃來沼公園</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=モエレ沼公園" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">野口勇大師親自設計，幾何大地雕塑與玻璃金字塔秋景，年中無休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 35 min</div>
+                    <div><span class="drive-target">前往 札幌市區</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=モエレ沼公園&destination=札幌市區" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">17:55</div>
+                <div class="card-main">
+                    <div class="spot-name">🏨 入住：札幌市區酒店</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=札幌車站+酒店" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-alert">🚨 入住時間重點提示</span></div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 9 ==================== -->
+        <div id="day9" class="day-panel theme-day9">
+            <div class="day-header">
+                <div class="day-title">🍷 Day 9: 酒莊序曲 ➔ 買手店地毯式掃貨</div>
+                <div class="weather-box">札幌 ☁️<br>15°C / 8°C</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">09:15</div>
+                <div class="spot-name" style="font-size:1.1rem;">🚗 札幌市區 出發</div>
+                <div class="card-desc">逆向出發開往西南郊區八劍山（避開進城週末車潮）。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 35 min | 🛣️ 18 km</div>
+                    <div><span class="drive-target">前往 八劍山</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=札幌市區&destination=八剣山ワイナリー" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">10:00 - 11:00</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 八剣山ワイナリー (八劍山酒莊)</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=八剣山ワイナリー" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">【🚨週六正常營業】挑選北海道自釀葡萄酒。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">11:00 - 11:55</div>
+                <div class="card-main">
+                    <div class="spot-name">🍱 八剣山キッチン＆マルシェ</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=八剣山キッチン＆マルシェ" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">【🚨週六正常營業】卡位最棒的戶外木質露台，享用在地食材咖哩。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 35 min | 🛣️ 18 km</div>
+                    <div><span class="drive-target">前往 狸小路/大通商圈</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=八剣山&destination=狸小路" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">12:30 - 18:15</div>
+                <div class="card-main">
+                    <div class="spot-name">🛍️ 五大買手店瘋狂購物</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=札幌+PARCO" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc" style="font-size:0.8rem;">
+                    <strong>避開人潮完美動線：</strong><br>
+                    12:30 ➔ MaW (搶COMOLI、A.PRESSE)<br>
+                    13:45 ➔ thread (攻AURALEE大衣)<br>
+                    15:00 ➔ Arch Sapporo (硬核復古軍工裝)<br>
+                    15:40 ➔ STEPS Sapporo (機能日常服)<br>
+                    16:30 ➔ 札幌 PARCO (STUDIOUS、CDG退稅)
+                </div>
+            </div>
+
+            <div class="card" style="background:#FFF0F0; border:1px solid #FFC0C0;">
+                <div class="time-badge" style="background:#FFD2D2; color:#C04040;">⚠️ 撤退防線提示</div>
+                <div class="card-desc" style="background:transparent; padding:0;">
+                    • <strong>若去 Moliere (米其林三星法餐)：</strong>18:15 必收尾 ➔ 18:30 前務必開車 ➔ 18:55 抵達圓山公園 ➔ 19:00 入座。<br>
+                    • <strong>若去 田久酢：</strong>可步行不受車流影響，逛到 18:40 ➔ 步行 800m ➔ 19:00 抵達。
+                </div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">19:00 - 21:30</div>
+                <div class="card-main">
+                    <div class="spot-name">🍱 Restaurant Moliere 或 田久酢</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=Restaurant+Moliere+札幌" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">【🚨餐廳均正常營業】享用極致高奢晚宴。</div>
+            </div>
+        </div>
+
+        <!-- ==================== DAY 10 ==================== -->
+        <div id="day10" class="day-panel theme-day10">
+            <div class="day-header">
+                <div class="day-title">🏛️ Day 10: 安藤建築 ➔ 鮭魚逆流 ➔ 機場</div>
+                <div class="weather-box">千歲 ☀️<br>14°C / 7°C</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">09:00</div>
+                <div class="card-main">
+                    <div class="spot-name">🚗 酒店退房，直接出發！</div>
+                </div>
+                <div><span class="badge badge-alert">🚨 酒店退房時間提示</span></div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 45 min | 🛣️ 20 km</div>
+                    <div><span class="drive-target">前往 頭大仏殿</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=札幌市區&destination=真駒内滝野霊園+頭大仏" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">09:45 - 11:15</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 真駒內頭大佛殿</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=真駒内滝野霊園+頭大仏" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">大師安藤忠雄清水模神作，上午光影最立體，無定休。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 20 min | 🛣️ 13.4 km</div>
+                    <div><span class="drive-target">前往 札幌藝術之森</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=頭大仏&destination=札幌芸術の森" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">11:35 - 13:20</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 札幌藝術之森</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=札幌芸術の森" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">🍱 在漫山紅葉與戶外雕塑間浪漫散策。於極安靜的【北方民族工藝館 咖啡廳】悠閒享用輕食午餐。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 25 min</div>
+                    <div><span class="drive-target">前往 羊ヶ丘展望台</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=札幌芸術の森&destination=羊ヶ丘展望台" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">13:45 - 14:45</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 札幌羊之丘展望台</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=羊ヶ丘展望台" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">【✨加碼景點】站在克拉克博士雕像旁，遠眺秋季金黃牧草地與札幌巨蛋。</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 40 min</div>
+                    <div><span class="drive-target">前往 千歲鮭魚故鄉水族館</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=羊ヶ丘展望台&destination=サケのふるさと+千歳水族館" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">15:25 - 16:35</div>
+                <div class="card-main">
+                    <div class="spot-name">📍 千歲鮭魚故鄉水族館 & 道之驛</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=サケのふるさと+千歳水族館" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div class="card-desc">【✨加碼景點】走入地下觀察室，親眼目睹成千上萬條野生鮭魚逆流而上的真實震撼奇觀！</div>
+            </div>
+
+            <div class="drive-card">
+                <div class="drive-info">
+                    <div>⏱️ 15 min</div>
+                    <div><span class="drive-target">前往 新千歲機場還車處</span></div>
+                </div>
+                <a class="map-link" href="https://www.google.com/maps/dir/?api=1&origin=千歳水族館&destination=新千歲機場+租車" target="_blank">🗺️ 導航</a>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">17:00</div>
+                <div class="card-main">
+                    <div class="spot-name">✈️ 抵達新千歲機場還車處</div>
+                    <a class="map-link" href="https://www.google.com/maps/search/?api=1&query=新千歳空港" target="_blank">🗺️ 地圖</a>
+                </div>
+                <div><span class="badge badge-port">🚨 機場抵達與還車時間提示</span></div>
+                <div class="card-desc">準時安全抵達，無市區塞車風險。辦理完還車後前往國內線航廈。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">17:30 - 20:30</div>
+                <div class="spot-name">🎒 新千歲機場國內線大橫掃</div>
+                <div class="card-desc">整整 3 個小時悠閒狂掃伴手禮（六花亭、北菓樓、LeTAO、生巧克力），並在「拉麵道場」享用熱騰騰的一幻拉麵。</div>
+            </div>
+
+            <div class="card">
+                <div class="time-badge">21:20</div>
+                <div class="spot-name">✈️ 乘坐 NH84 航班起飛</div>
+                <div><span class="badge badge-port">🚨 機場登機乘坐時間提示</span></div>
+                <div class="card-desc">23:05 順利降落東京羽田機場，北海道美學之旅大獲全勝！</div>
+            </div>
+        </div>
+
+    </div>
+</div>
+
+<script>
+    function switchDay(dayNum) {
+        // 隱藏所有的面板
+        const panels = document.querySelectorAll('.day-panel');
+        panels.forEach(panel => panel.classList.remove('active'));
+
+        // 取消所有按鈕的 active
+        const buttons = document.querySelectorAll('.tab-btn');
+        buttons.forEach(btn => btn.classList.remove('active'));
+
+        // 顯示當天面板與激活按鈕
+        const targetPanel = document.getElementById('day10'); // fallback
+        const currentPanel = document.getElementById('day' + dayNum);
+        if(currentPanel) currentPanel.classList.add('active');
+
+        const currentBtn = buttons[dayNum - 1];
+        if(currentBtn) currentBtn.classList.add('active');
+
+        // 自動橫向滾動頁籤列，保持選中的頁籤在可視範圍
+        const tabBar = document.getElementById('tabBar');
+        if(currentBtn) {
+            const offsetLeft = currentBtn.offsetLeft - (tabBar.offsetWidth / 2) + (currentBtn.offsetWidth / 2);
+            tabBar.scrollTo({ left: offsetLeft, behavior: 'smooth' });
+        }
+    }
+</script>
+
+</body>
+</html>
